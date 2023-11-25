@@ -1,25 +1,28 @@
 public class GameBoard {
-    // 0 = empty
-    // 1 = pacman
-    // 2 = enemy
-    // 3 = wall
-    private byte[,] field;
-    private Character[] characters;
-
-    public GameBoard(int width, int height, Character[] characters) {
-        field = new byte[width, height];
-        this.characters = characters;
-        InitializeFieldBorder();
+    public Ghost[] Ghosts {get; private set;}
+    public PacMan PacMan {get; private set;}
+    public HashSet<Position> Walls { get; private set; }
+    public HashSet<Position> Fruits { get; private set; }
+    public GameBoard(Position[] walls, Ghost[] ghosts, PacMan pacMan, Position[] fruits) {
+        Walls = new HashSet<Position>(walls);
+        Fruits = new HashSet<Position>(fruits);
+        Ghosts = ghosts;
+        PacMan = pacMan;
+        pacMan.SetGameBoard(this);
+        foreach (var ghost in ghosts) {
+            ghost.SetGameBoard(this);
+        }
     }
 
-    private void InitializeFieldBorder() {
-        for (int i = 0; i < field.GetLength(0); i++) {
-            field[i, 0] = 3;
-            field[i, field.GetLength(1) - 1] = 3;
-        }
-        for (int i = 0; i < field.GetLength(1); i++) {
-            field[0, i] = 3;
-            field[field.GetLength(0) - 1, i] = 3;
-        }
+    public bool IsWall(Position position) {
+        return Walls.Contains(position);
+    }
+
+    public bool IsFruit(Position position) {
+        return Fruits.Contains(position);
+    }
+
+    public void RemoveFruit(Position position) {
+        Fruits.Remove(position);
     }
 }
