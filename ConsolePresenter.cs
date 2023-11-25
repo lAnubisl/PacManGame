@@ -1,16 +1,18 @@
 public class ConsolePresenter : IPresenter
 {
-    private PacMan pacMan;
+    private GameBoard gameBoard;
 
     public ConsolePresenter()
     {
+        Console.WindowHeight = 60;
+        Console.WindowWidth = 60;
         Console.OutputEncoding = System.Text.Encoding.UTF8;
         Console.CursorVisible = false;
     }
 
-    public void SetPacMan(PacMan pacMan)
+    public void SetGameBoard(GameBoard gameBoard)
     {
-        this.pacMan = pacMan;
+        this.gameBoard = gameBoard;
     }
 
     public int AskForBoardNumber()
@@ -25,15 +27,19 @@ public class ConsolePresenter : IPresenter
         return Console.ReadLine();
     }
 
-    public void ReflectCharacterMovements(CharacterMovement[] characterMovements)
+    public void ReflectCharacterMovements(CharacterMovement characterMovements)
     {
-        foreach (var characterMovement in characterMovements)
+        SetPosition(characterMovements.From);
+        if (characterMovements.IsPacman == false && gameBoard.IsFruit(characterMovements.From))
         {
-            SetPosition(characterMovement.From);
-            Console.Write(" ");
-            SetPosition(characterMovement.To);
-            Console.Write(characterMovement.IsPacman ? "☻" : "◘");
+            Console.Write("•");
         }
+        else
+        {
+            Console.Write(" ");
+        }
+        SetPosition(characterMovements.To);
+        Console.Write(characterMovements.IsPacman ? "☻" : "◘");
     }
 
     private void SetPosition(Position position)
@@ -87,10 +93,10 @@ public class ConsolePresenter : IPresenter
             var keyInfo = Console.ReadKey();
             switch (keyInfo.Key)
             {
-                case ConsoleKey.LeftArrow: pacMan.TurnLeft(); break;
-                case ConsoleKey.RightArrow: pacMan.TurnRight(); break;
-                case ConsoleKey.UpArrow: pacMan.TurnUp(); break;
-                case ConsoleKey.DownArrow: pacMan.TurnDown(); break;
+                case ConsoleKey.LeftArrow: gameBoard.PacMan.TurnLeft(); break;
+                case ConsoleKey.RightArrow: gameBoard.PacMan.TurnRight(); break;
+                case ConsoleKey.UpArrow: gameBoard.PacMan.TurnUp(); break;
+                case ConsoleKey.DownArrow: gameBoard.PacMan.TurnDown(); break;
             }
         }
     }

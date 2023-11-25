@@ -9,9 +9,9 @@ public interface IPresenter {
 
     void ShowGameBoard(GameBoard gameBoard);
 
-    void ReflectCharacterMovements(CharacterMovement[] characterMovements);
+    void ReflectCharacterMovements(CharacterMovement characterMovements);
 
-    void SetPacMan(PacMan pacMan);
+    void SetGameBoard(GameBoard gameBoard);
 
     void StartReadingInput();
 }

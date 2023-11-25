@@ -19,7 +19,7 @@ public class Game {
         string boardName = gameBoards[boardNumber - 1];
         gameBoard = gameBoardFileReader.ReadFromFile(boardName);
 
-        presenter.SetPacMan(gameBoard.PacMan);
+        presenter.SetGameBoard(gameBoard);
         presenter.ShowGameBoard(gameBoard);
         Task.Factory.StartNew(() => {
             presenter.StartReadingInput();
@@ -37,7 +37,7 @@ public class Game {
 
     private bool IsGameOver() {
         foreach (var ghost in gameBoard.Ghosts) {
-            if (ghost.Position.X == gameBoard.PacMan.Position.X && ghost.Position.Y == gameBoard.PacMan.Position.Y) {
+            if (ghost.PacmanCaught()) {
                 return true;
             }
         }
@@ -46,11 +46,9 @@ public class Game {
     }
 
     private void Update() {
-        var characterMovements = new List<CharacterMovement>();
-        characterMovements.Add(this.gameBoard.PacMan.Move());
+        presenter.ReflectCharacterMovements(this.gameBoard.PacMan.Move());
         foreach (var ghost in gameBoard.Ghosts) {
-            characterMovements.Add(ghost.Move());
+            presenter.ReflectCharacterMovements(ghost.Move());
         }
-        presenter.ReflectCharacterMovements(characterMovements.ToArray());
     }
 }
