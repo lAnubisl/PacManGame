@@ -8,6 +8,7 @@ public class Game {
     }
 
     public void Start() {
+        
         presenter.ShowWelcomeMessage();
         string playerName = presenter.AskForPlayerName();
         player = new Player(playerName);
